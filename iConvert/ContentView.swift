@@ -17,6 +17,38 @@ struct ContentView: View {
     
     @FocusState private var numberIsFocused: Bool
     
+    func convertToSeconds(input: Double) -> Double {
+        switch selectedConversionFromOption {
+        case "seconds":
+            return input
+        case "minutes":
+            return input * 60
+        case "hours":
+            return input * 60 * 60
+        case "days":
+            return input * 86_400
+        default:
+            return 0.0
+        }
+    }
+    
+    func calculateResult(input: Double) -> Double {
+        let result = convertToSeconds(input: input)
+        
+        switch selectedConversionToOption {
+        case "seconds":
+            return result
+        case "minutes":
+            return result / 60
+        case "hours":
+            return result / 60 / 60
+        case "days":
+            return result / 86_400
+        default:
+            return 0.0
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -51,12 +83,12 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Text("\(userInput) \(selectedConversionFromOption) is \(result) \(selectedConversionToOption).")
+                    Text("\(userInput, specifier: "%.2f") \(selectedConversionFromOption) is \(calculateResult(input: userInput), specifier: "%.2f") \(selectedConversionToOption).")
                 } header: {
                     Text("result")
                 }
             }
-            .navigationTitle("iConvert")
+            .navigationTitle("iConvert 🕣")
             .toolbar {
                 if numberIsFocused {
                     Button("Done") {
